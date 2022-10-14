@@ -14,6 +14,6 @@ public class ResFileService {
 
     public String saveResource(ResFile resFile) {
         resFileRepository.save(resFile);
-        return resFile.getUid().toString();
+        return resFile.getUid();
     }
 }
