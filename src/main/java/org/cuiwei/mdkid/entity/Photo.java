@@ -1,21 +1,29 @@
 package org.cuiwei.mdkid.entity;
 
+import com.vladmihalcea.hibernate.type.json.JsonStringType;
+import com.vladmihalcea.hibernate.type.json.JsonType;
 import lombok.Getter;
 import lombok.Setter;
+import org.cuiwei.mdkid.gaode.dto.AddressComponent;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
-@Entity(name = "resource")
+@Entity(name = "photo")
 @Getter
 @Setter
 @GenericGenerator(name = "jpa-uuid", strategy = "uuid")
-public class ResFile {
+@TypeDef(
+        name = "json",
+        typeClass = JsonType.class
+)
+public class Photo {
     @Id
     @Column(name = "id", length = 32, nullable = false)
     @GeneratedValue(generator = "jpa-uuid")
@@ -33,13 +41,25 @@ public class ResFile {
     @Column(name = "upload_time", nullable = false)
     LocalDateTime uploadTime;
 
-    @Column(length = 32, nullable = false)
+    @Column(length = 512, nullable = false)
     String fid;
 
     @Column(length = 32, name = "event_id")
     String eventId;
 
-    @Column(length = 32, columnDefinition = "text")
+    @Column(columnDefinition = "text")
     String remark;
+
+    @Column(columnDefinition = "text")
+    String path;
+    /**
+     * 拍摄时间
+     */
+    @Column(name = "take_time")
+    LocalDateTime takeTime;
+
+    @Type(type = "json")
+    @Column(columnDefinition = "json")
+    AddressComponent address;
 
 }

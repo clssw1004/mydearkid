@@ -1,18 +1,15 @@
 package org.cuiwei.mdkid;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.imaging.ImageProcessingException;
-import com.drew.metadata.Metadata;
 import lombok.extern.slf4j.Slf4j;
-import org.cuiwei.mdkid.entity.ResFile;
-import org.cuiwei.mdkid.service.ResFileService;
+import org.cuiwei.mdkid.entity.Photo;
+import org.cuiwei.mdkid.service.PhotoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
 
 @SpringBootTest
@@ -20,18 +17,25 @@ import java.time.LocalDateTime;
 class ApplicationTests {
 
     @Autowired
-    ResFileService resFileService;
+    PhotoService photoService;
 
     @Test
     void addResFile() {
-        ResFile file = new ResFile();
-        file.setFileLength(10245L);
-        file.setRemark("sasasa");
-        file.setUploadTime(LocalDateTime.now());
-        file.setFid(IdUtil.fastSimpleUUID());
-        resFileService.saveResource(file);
+        File dir = new File("F:\\cuiwei\\Images");
+        if (dir.isDirectory()) {
+            String[] children = dir.list();
+            for (String f : children) {
+                try {
+                    File file = new File(dir, f);
+                    if (file.isFile()) {
+                        photoService.saveResource(file);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
-
 
 
 }
