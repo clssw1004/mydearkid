@@ -1,6 +1,5 @@
 package org.cuiwei.mdkid.entity;
 
-import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +17,7 @@ import java.time.LocalDateTime;
 @Entity(name = "photo")
 @Getter
 @Setter
-@GenericGenerator(name = "jpa-uuid", strategy = "uuid")
+@GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator" )
 @TypeDef(
         name = "json",
         typeClass = JsonType.class
@@ -26,7 +25,7 @@ import java.time.LocalDateTime;
 public class Photo {
     @Id
     @Column(name = "id", length = 32, nullable = false)
-    @GeneratedValue(generator = "jpa-uuid")
+    @GeneratedValue(generator = "uuid2")
     String uid;
 
     /**
