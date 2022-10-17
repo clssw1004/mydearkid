@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -20,6 +21,12 @@ public class PhotoService {
 
     @Resource
     PhotoRepository photoRepository;
+
+    public List<Photo> list()
+    {
+        List<Photo> photos = photoRepository.findAll();
+        return photos;
+    }
 
     public String saveResource(Photo photo) {
         photoRepository.save(photo);
