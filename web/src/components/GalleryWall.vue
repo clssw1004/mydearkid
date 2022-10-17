@@ -1,12 +1,32 @@
-<script setup lang="ts">
-import { ref } from 'vue'
+<script  lang="ts">
+import { defineComponent } from 'vue'
+import axios from "axios";
+import { Photo } from "../types/Photo"
 
-// defineProps<{}>()
-const fits = ['fill', 'contain', 'cover', 'none', 'scale-down']
-const url =
-    'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+async function loadList(): Promise<Photo[]> {
+    const url = "http://127.0.0.1:17777/api/photo/";
+    const response = await axios({ url, method: "GET" });
+    if (response.status === 200) {
+        return response.data.data as Photo[];
+    }
+    return [];
+}
+
+
+export default defineComponent({
+
+    data() {
+        const list: Photo[] = [];
+        return {
+            list,
+        }
+    },
+    async mounted() {
+        this.list = await loadList();
+    }
+})
 
 </script>
 <template>
-    <el-image style="width: 100px; height: 100px" :src="url" :fit="fit" />
+    <!-- <el-image style="width: 100px; height: 100px" :src="url" fit="fill" /> -->
 </template>
