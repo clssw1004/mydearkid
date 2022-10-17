@@ -1,20 +1,8 @@
 <script  lang="ts">
 import { defineComponent } from 'vue'
-import axios from "axios";
 import { Photo } from "../types/Photo"
-
-async function loadList(): Promise<Photo[]> {
-    const url = "http://127.0.0.1:17777/api/photo/";
-    const response = await axios({ url, method: "GET" });
-    if (response.status === 200) {
-        return response.data.data as Photo[];
-    }
-    return [];
-}
-
-
+import { getPage } from "../services/photo";
 export default defineComponent({
-
     data() {
         const list: Photo[] = [];
         return {
@@ -22,11 +10,31 @@ export default defineComponent({
         }
     },
     async mounted() {
-        this.list = await loadList();
+        const page = await getPage({ page: 1, pagesize: 20 });
+        if (page.size > 0) {
+            this.list = page.content;
+        }
     }
 })
 
 </script>
 <template>
-    <!-- <el-image style="width: 100px; height: 100px" :src="url" fit="fill" /> -->
+    <div class="gallery-box">
+        <el-image v-for="photo of list" class="img-item" :src="`http://127.0.0.1:17777/api/photo/view/${photo.fid}`"
+            fit="fill" />
+    </div>
 </template>
+
+<style scoped>
+.gallery-box {
+    float: left;
+}
+
+.img-item {
+    width: 200px;
+    height: 200px;
+    display: inline-block;
+}
+
+.img-item img {}
+</style>

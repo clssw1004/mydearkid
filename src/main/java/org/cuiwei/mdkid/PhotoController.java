@@ -24,7 +24,7 @@ public class PhotoController {
         return Response.builder().code(0).message("ok").data(photoService.list()).build();
     }
 
-    @GetMapping("/view/{fig}")
+    @GetMapping("/view/{fid}")
     public void getFile(@PathVariable("fid") String fid, HttpServletResponse response) throws IOException {
         photoService.getPhoto(fid, response);
     }

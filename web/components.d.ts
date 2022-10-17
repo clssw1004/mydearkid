@@ -7,7 +7,9 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ElCol: typeof import('element-plus/es')['ElCol']
     ElImage: typeof import('element-plus/es')['ElImage']
+    ElRow: typeof import('element-plus/es')['ElRow']
     GalleryWall: typeof import('./src/components/GalleryWall.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
   }

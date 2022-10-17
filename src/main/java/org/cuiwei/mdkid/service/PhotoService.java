@@ -1,6 +1,7 @@
 package org.cuiwei.mdkid.service;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.IdUtil;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
@@ -46,13 +47,12 @@ public class PhotoService {
         photo.setFileLength(img.length());
         photo.setUploadTime(LocalDateTime.now());
         photo.setPath(img.getPath());
-        photo.setFid(img.getPath());
+        photo.setFid(IdUtil.fastUUID());
         Metadata metadata = ImageMetadataReader.readMetadata(img);
         photo.setAddress(ExifUtil.getAddress(metadata));
         photo.setTakeTime(ExifUtil.getTakeTime(metadata));
         photoRepository.save(photo);
         return photo.getUid();
-
     }
 
     public void getPhoto(String fid, HttpServletResponse response) throws IOException {
@@ -60,7 +60,7 @@ public class PhotoService {
         if(optionalPhoto.isPresent())
         {
             Photo photo = optionalPhoto.get();
-            File file = new File(photo.getFid());
+            File file = new File(photo.getPath());
             OutputStream os = response.getOutputStream();
             FileUtil.writeToStream(file, os);
         }

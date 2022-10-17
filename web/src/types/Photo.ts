@@ -1,5 +1,11 @@
 
 export interface Photo {
+    uid: string;
+    fileLength: number;
+    uploadTime: number[];
     fid: string;
-    uid: string
+    eventId: string;
+    remark: string;
+    path: string;
+    takeTime: Date;
 }
