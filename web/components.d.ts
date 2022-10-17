@@ -12,5 +12,7 @@ declare module '@vue/runtime-core' {
     ElRow: typeof import('element-plus/es')['ElRow']
     GalleryWall: typeof import('./src/components/GalleryWall.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    Photo: typeof import('./src/components/Photo.vue')['default']
+    PhotoItem: typeof import('./src/components/PhotoItem.vue')['default']
   }
 }
