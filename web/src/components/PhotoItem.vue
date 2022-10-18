@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Photo } from '../types/Photo';
-
 defineProps<{ photo: Photo }>()
 
 </script>
 
 <template>
-    <el-image class="img-item" :src="`http://127.0.0.1:17777/api/photo/view/${photo.fid}`" fit="fill" />
+    <el-card class="img-item" :body-style="{ padding: '0px' }">
+        <el-image :src="`http://127.0.0.1:17777/api/photo//thumbnail/${photo.fid}`" fit="fill" />
+        <div v-if="photo.takeTime">{{photo.takeTime}}</div>
+    </el-card>
 </template>
 
 <style scoped>
@@ -21,5 +23,4 @@ defineProps<{ photo: Photo }>()
     display: inline-block;
     margin: 0 5px;
 }
-
 </style>

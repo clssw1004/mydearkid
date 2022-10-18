@@ -13,3 +13,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+config:
+  thumbnail:
+    path: ${thumbnail_path:D:\\thumbnail}

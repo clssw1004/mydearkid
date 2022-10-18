@@ -1,5 +1,6 @@
 package org.cuiwei.mdkid.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @Entity(name = "photo")
 @Getter
 @Setter
-@GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator" )
+@GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
 @TypeDef(
         name = "json",
         typeClass = JsonType.class
@@ -34,10 +35,17 @@ public class Photo {
     @Column(name = "file_length", nullable = false)
     Long fileLength;
 
+    @Column(length = 64)
+    String extension;
+
+    @Column(length = 255)
+    String originName;
+
     /**
      * 上传时间
      */
     @Column(name = "upload_time", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime uploadTime;
 
     @Column(length = 512, nullable = false)
@@ -55,6 +63,7 @@ public class Photo {
      * 拍摄时间
      */
     @Column(name = "take_time")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDateTime takeTime;
 
     @Type(type = "json")

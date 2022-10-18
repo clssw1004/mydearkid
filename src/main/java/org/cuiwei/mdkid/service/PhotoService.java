@@ -1,6 +1,7 @@
 package org.cuiwei.mdkid.service;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.text.StrFormatter;
 import cn.hutool.core.util.IdUtil;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -9,18 +10,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.cuiwei.mdkid.entity.Photo;
 import org.cuiwei.mdkid.repository.PhotoRepository;
 import org.cuiwei.mdkid.util.ExifUtil;
+import org.cuiwei.mdkid.util.ImageUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -28,9 +26,15 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class PhotoService {
+    @Value("${config.thumbnail.path}")
+    String thumbnailPath;
 
     @Resource
     PhotoRepository photoRepository;
+
+    public List<Photo> listAll() {
+        return photoRepository.findAll();
+    }
 
     public Page<Photo> list() {
         Page<Photo> photos = photoRepository.findAll(PageRequest.of(1, 60));
@@ -55,14 +59,27 @@ public class PhotoService {
         return photo.getUid();
     }
 
-    public void getPhoto(String fid, HttpServletResponse response) throws IOException {
+    public File getOriginal(String fid) throws IOException {
         Optional<Photo> optionalPhoto = photoRepository.findByFid(fid);
-        if(optionalPhoto.isPresent())
-        {
+        if (optionalPhoto.isPresent()) {
             Photo photo = optionalPhoto.get();
-            File file = new File(photo.getPath());
-            OutputStream os = response.getOutputStream();
-            FileUtil.writeToStream(file, os);
+            return new File(photo.getPath());
         }
+        throw new RuntimeException("文件不存在");
+    }
+
+    public File getThumbnail(String fid) throws IOException {
+        if (!FileUtil.exist(thumbnailPath)) {
+            FileUtil.mkdir(thumbnailPath);
+        }
+        File photo = getOriginal(fid);
+        File destFile = new File(StrFormatter.format("{}{}{}.jpg", thumbnailPath, File.separator, fid));
+        if (!FileUtil.exist(destFile)) {
+            log.info("scale {} -> {}", photo.getPath(), destFile);
+            ImageUtil.scale(
+                    photo,
+                    FileUtil.getOutputStream(destFile));
+        }
+        return destFile;
     }
 }

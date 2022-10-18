@@ -7,5 +7,5 @@ export interface Photo {
     eventId: string;
     remark: string;
     path: string;
-    takeTime: Date;
+    takeTime: string;
 }
