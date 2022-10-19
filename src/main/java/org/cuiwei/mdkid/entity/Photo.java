@@ -18,15 +18,13 @@ import java.time.LocalDateTime;
 @Entity(name = "photo")
 @Getter
 @Setter
-@GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
 @TypeDef(
         name = "json",
         typeClass = JsonType.class
 )
 public class Photo {
     @Id
-    @Column(name = "id", length = 32, nullable = false)
-    @GeneratedValue(generator = "uuid2")
+    @Column(name = "uid")
     String uid;
 
     /**
@@ -47,6 +45,9 @@ public class Photo {
     @Column(name = "upload_time", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime uploadTime;
+
+    @Column(name="file_sha256")
+    String fileSha256;
 
     @Column(length = 512, nullable = false)
     String fid;

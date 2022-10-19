@@ -3,10 +3,12 @@ package org.cuiwei.mdkid.service;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.text.StrFormatter;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.crypto.digest.DigestUtil;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.cli.Digest;
 import org.cuiwei.mdkid.entity.Photo;
 import org.cuiwei.mdkid.repository.PhotoRepository;
 import org.cuiwei.mdkid.util.ExifUtil;
@@ -26,7 +28,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class PhotoService {
-    @Value("${config.thumbnail.path}")
+    @Value("${config.path.thumbnail}")
     String thumbnailPath;
 
     @Resource
@@ -41,6 +43,11 @@ public class PhotoService {
         return photos;
     }
 
+    public boolean photoExist(File file) {
+        return file.exists() || photoRepository.existsByFileSha256(DigestUtil.sha256Hex(file));
+    }
+
+
     public String saveResource(Photo photo) {
         photoRepository.save(photo);
         return photo.getUid();
@@ -48,10 +55,14 @@ public class PhotoService {
 
     public String saveResource(File img) throws ImageProcessingException, IOException {
         Photo photo = new Photo();
+        photo.setUid(IdUtil.simpleUUID());
         photo.setFileLength(img.length());
         photo.setUploadTime(LocalDateTime.now());
         photo.setPath(img.getPath());
-        photo.setFid(IdUtil.fastUUID());
+        photo.setFid(IdUtil.simpleUUID());
+        photo.setOriginName(img.getName());
+        photo.setFileSha256(DigestUtil.sha256Hex(img));
+        photo.setExtension(FileUtil.extName(img));
         Metadata metadata = ImageMetadataReader.readMetadata(img);
         photo.setAddress(ExifUtil.getAddress(metadata));
         photo.setTakeTime(ExifUtil.getTakeTime(metadata));

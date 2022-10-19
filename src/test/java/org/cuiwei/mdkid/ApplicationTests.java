@@ -23,33 +23,5 @@ class ApplicationTests {
 
     @Autowired
     PhotoRepository photoRepository;
-   @Test
-    void updateUuid()
-    {
-        List<Photo> photoList = photoRepository.findAll();
-        photoList.stream().forEach(p->{
-            p.setFid(IdUtil.simpleUUID());
-        });
-        photoRepository.saveAll(photoList);
-    }
-
-    @Test
-    void addResFile() {
-        File dir = new File("F:\\cuiwei\\Images");
-        if (dir.isDirectory()) {
-            String[] children = dir.list();
-            for (String f : children) {
-                try {
-                    File file = new File(dir, f);
-                    if (file.isFile()) {
-                        photoService.saveResource(file);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
 
 }
