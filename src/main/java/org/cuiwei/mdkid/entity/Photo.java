@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 )
 public class Photo {
     @Id
-    @Column(name = "uid")
+    @Column(name = "uid",length = 32)
     String uid;
 
     /**

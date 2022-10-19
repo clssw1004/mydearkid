@@ -44,7 +44,7 @@ public class PhotoService {
     }
 
     public boolean photoExist(File file) {
-        return file.exists() || photoRepository.existsByFileSha256(DigestUtil.sha256Hex(file));
+        return file.exists() && photoRepository.existsByFileSha256(DigestUtil.sha256Hex(file));
     }
 
 

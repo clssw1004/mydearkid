@@ -5,6 +5,7 @@ import cn.hutool.core.util.IdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.cuiwei.mdkid.entity.Photo;
 import org.cuiwei.mdkid.repository.PhotoRepository;
+import org.cuiwei.mdkid.schedule.RefreshPhotos;
 import org.cuiwei.mdkid.service.PhotoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +24,13 @@ class ApplicationTests {
 
     @Autowired
     PhotoRepository photoRepository;
+
+    @Autowired
+    RefreshPhotos refreshPhotos;
+
+    @Test
+    void rp() {
+        refreshPhotos.refresh();
+    }
 
 }
