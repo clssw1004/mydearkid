@@ -1,17 +1,13 @@
 package org.cuiwei.mdkid.schedule;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.text.StrFormatter;
 import lombok.extern.slf4j.Slf4j;
-import org.cuiwei.mdkid.entity.Photo;
+import org.cuiwei.mdkid.model.Photo;
 import org.cuiwei.mdkid.service.PhotoService;
-import org.cuiwei.mdkid.util.ImageUtil;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 

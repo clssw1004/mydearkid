@@ -2,7 +2,7 @@ package org.cuiwei.mdkid.schedule;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.crypto.digest.DigestUtil;
-import org.cuiwei.mdkid.entity.Photo;
+import org.cuiwei.mdkid.model.Photo;
 import org.cuiwei.mdkid.service.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

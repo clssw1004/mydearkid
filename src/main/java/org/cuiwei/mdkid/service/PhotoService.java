@@ -7,12 +7,14 @@ import cn.hutool.crypto.digest.DigestUtil;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.cli.Digest;
-import org.cuiwei.mdkid.entity.Photo;
+import org.cuiwei.mdkid.model.Photo;
+import org.cuiwei.mdkid.model.QPhoto;
 import org.cuiwei.mdkid.repository.PhotoRepository;
 import org.cuiwei.mdkid.util.ExifUtil;
 import org.cuiwei.mdkid.util.ImageUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +30,10 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class PhotoService {
+
+    @Autowired
+    JPAQueryFactory queryFactory;
+
     @Value("${config.path.thumbnail}")
     String thumbnailPath;
 
@@ -39,6 +45,8 @@ public class PhotoService {
     }
 
     public Page<Photo> list() {
+        QPhoto photo = QPhoto.photo;
+        queryFactory.select(photo).where()
         Page<Photo> photos = photoRepository.findAll(PageRequest.of(1, 60));
         return photos;
     }

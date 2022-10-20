@@ -1,5 +1,5 @@
 server:
-  port: 17777
+  port: ${SERVER_PORT:17777}
   servlet:
     context-path: /api
 spring:
