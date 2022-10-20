@@ -46,7 +46,7 @@ public class PhotoService {
 
     public Page<Photo> list() {
         QPhoto photo = QPhoto.photo;
-        queryFactory.select(photo).where()
+//        queryFactory.select(photo).where()
         Page<Photo> photos = photoRepository.findAll(PageRequest.of(1, 60));
         return photos;
     }
