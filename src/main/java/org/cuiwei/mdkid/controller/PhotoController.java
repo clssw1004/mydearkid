@@ -1,4 +1,4 @@
-package org.cuiwei.mdkid;
+package org.cuiwei.mdkid.controller;
 
 import cn.hutool.core.io.FileUtil;
 import lombok.extern.slf4j.Slf4j;

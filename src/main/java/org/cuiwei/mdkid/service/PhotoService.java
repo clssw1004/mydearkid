@@ -17,7 +17,9 @@ import org.cuiwei.mdkid.util.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -40,15 +42,18 @@ public class PhotoService {
     @Resource
     PhotoRepository photoRepository;
 
+
     public List<Photo> listAll() {
         return photoRepository.findAll();
     }
 
     public Page<Photo> list() {
         QPhoto photo = QPhoto.photo;
-//        queryFactory.select(photo).where()
-        Page<Photo> photos = photoRepository.findAll(PageRequest.of(1, 60));
-        return photos;
+        Pageable pageable = PageRequest.of(1, 50);
+        List<Photo> photos = queryFactory.selectFrom(photo)
+                .where(photo.extension.eq("HEIC")).offset(pageable.getOffset()).limit(pageable.getPageSize())
+                .fetch();
+        return new PageImpl<>(photos, pageable, 1000);
     }
 
     public boolean photoExist(File file) {
@@ -94,7 +99,7 @@ public class PhotoService {
         File photo = getOriginal(fid);
         File destFile = new File(StrFormatter.format("{}{}{}.jpg", thumbnailPath, File.separator, fid));
         if (!FileUtil.exist(destFile)) {
-            log.info("scale {} -> {}", photo.getPath(), destFile);
+            log.info("scale {} -> {}", photo.getPath(), destFile.getPath());
             ImageUtil.scale(
                     photo,
                     FileUtil.getOutputStream(destFile));

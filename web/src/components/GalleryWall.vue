@@ -3,7 +3,6 @@ import { defineComponent } from 'vue'
 import { Photo } from "../types/Photo"
 import { getPage } from "../services/photo";
 import PhotoItem from './PhotoItem.vue'
-import PhotoItem from './PhotoItem.vue'
 export default defineComponent({
     data() {
         const list: Photo[] = [];
