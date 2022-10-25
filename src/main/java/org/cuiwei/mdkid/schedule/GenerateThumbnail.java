@@ -19,18 +19,18 @@ public class GenerateThumbnail {
     @Resource
     PhotoService photoService;
 
-//    @Scheduled(cron = "0 0/30 * * * ?")
-//    public void generateThumbnail() throws IOException {
-//        List<Photo> photos = photoService.listAll();
-//        if (CollectionUtil.isEmpty(photos)) {
-//            return;
-//        }
-//        for (var photo : photos) {
-//            try {
-//                photoService.getThumbnail(photo.getFid());
-//            } catch (Exception e) {
-//                log.error(e.getMessage(), e);
-//            }
-//        }
-//    }
+    @Scheduled(cron = "0 0/30 * * * ?")
+    public void generateThumbnail() throws IOException {
+        List<Photo> photos = photoService.listAll();
+        if (CollectionUtil.isEmpty(photos)) {
+            return;
+        }
+        for (var photo : photos) {
+            try {
+                photoService.getThumbnail(photo.getFid());
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+    }
 }

@@ -18,7 +18,7 @@ services:
       POSTGRES_PASSWORD: 123456
       PGDATA: /var/lib/postgresql/data
     volumes:
-      - "D:/ddata:/var/lib/postgresql/data"
+      - "$PWD/ddata:/var/lib/postgresql/data"
 #  adminer:
 #    image: adminer
 #    restart: always

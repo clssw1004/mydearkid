@@ -14,5 +14,5 @@ spring:
     show-sql: true
 config:
   path:
-    photo: ${PHOTO_PATH:F:/cuiwei/Images}
-    thumbnail: ${THUMBNAIL_PATH:D:/thumbnail}
+    photo: ${PHOTO_PATH:/home/cuiwei/warhouse/images}
+    thumbnail: ${THUMBNAIL_PATH:/home/cuiwei/warhouse/thumbnail}
