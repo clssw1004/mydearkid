@@ -5,7 +5,7 @@ server:
 spring:
   datasource:
     driver-class-name: ${DRIVER_CLASS_NAME:org.postgresql.Driver}
-    url: ${JDBC_URL:jdbc:postgresql://127.0.0.1:5432/mydearkid}
+    url: ${JDBC_URL:jdbc:postgresql://192.168.2.236:5432/mydearkid}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:123456}
   jpa:
@@ -14,6 +14,6 @@ spring:
     show-sql: true
 config:
   path:
-    photo: ${PHOTO_PATH:/home/cuiwei/warhouse/images}
-    thumbnail: ${THUMBNAIL_PATH:/home/cuiwei/warhouse/thumbnail}
+    photo: ${PHOTO_PATH:D:/cuiwei/Images}
+    thumbnail: ${THUMBNAIL_PATH:D:/thumbnail}
   extensions: ${EXTENSIONS:jpeg,png,bmp,jpg}

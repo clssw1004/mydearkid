@@ -1,7 +1,9 @@
 package org.cuiwei.mdkid.util;
 
 import cn.hutool.core.img.ImgUtil;
+import cn.hutool.core.io.FileUtil;
 import com.luciad.imageio.webp.WebPWriteParam;
+import org.cuiwei.mdkid.constant.Constant;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -44,12 +46,21 @@ public class ImageUtil {
         int width = image.getWidth();
         int height = image.getHeight();
         float scale = 1f;
-        if(width>height)
-        {
-            scale = 200f/width;
-        }else {
-            scale = 200f/height;
+        if (width > height) {
+            scale = 200f / width;
+        } else {
+            scale = 200f / height;
         }
-        ImgUtil.scale(new FileInputStream(file),os, scale);
+        ImgUtil.scale(new FileInputStream(file), os, scale);
     }
+
+    public static boolean isSupportImg(String file) {
+        return Constant.SUPPORT_EXTENSIONS.stream().anyMatch(ext -> Constant.ALL_TYPE_EXTENSION.endsWith(ext) || FileUtil.extName(file).toUpperCase().endsWith(ext));
+    }
+
+    public static boolean isSupportImg(File file) {
+        return isSupportImg(file.getName());
+    }
+
+
 }

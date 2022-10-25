@@ -1,9 +1,12 @@
 package org.cuiwei.mdkid.schedule;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.img.ImgUtil;
 import cn.hutool.crypto.digest.DigestUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.cuiwei.mdkid.model.Photo;
 import org.cuiwei.mdkid.service.PhotoService;
+import org.cuiwei.mdkid.util.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,6 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class RefreshPhotos {
     @Value("${config.path.photo}")
     String photoPath;
@@ -37,6 +41,10 @@ public class RefreshPhotos {
         String[] children = dir.list();
         for (String f : children) {
             try {
+                if (!ImageUtil.isSupportImg(f)) {
+                    log.info("Not support file --> {}", f);
+                    continue;
+                }
                 File file = new File(dir, f);
                 String sha256 = DigestUtil.sha256Hex(file);
                 if (file.isFile() && !photoMap.containsKey(sha256)) {
