@@ -8,6 +8,7 @@ export default defineComponent({
         const list: Photo[] = [];
         return {
             list,
+            reverse: false
         };
     },
     async mounted() {
@@ -21,9 +22,13 @@ export default defineComponent({
 
 </script>
 <template>
-    <div class="gallery-box">
-        <PhotoItem v-for="photo of list" :photo="photo" />
-    </div>
+    <!-- <div class="gallery-box"> -->
+    <el-timeline :reverse="reverse">
+        <el-timeline-item v-for="photo of list" :key="photo.uid" :timestamp="photo.takeTime">
+            <PhotoItem :photo="photo" />
+        </el-timeline-item>
+    </el-timeline>
+    <!-- </div> -->
 </template>
 
 <style scoped>
@@ -31,5 +36,4 @@ export default defineComponent({
     width: 100%;
     float: left;
 }
-
 </style>

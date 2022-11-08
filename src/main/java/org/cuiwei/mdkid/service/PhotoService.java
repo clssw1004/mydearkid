@@ -51,7 +51,7 @@ public class PhotoService {
         QPhoto photo = QPhoto.photo;
         Pageable pageable = PageRequest.of(1, 50);
         List<Photo> photos = queryFactory.selectFrom(photo)
-                .where(photo.extension.eq("HEIC")).offset(pageable.getOffset()).limit(pageable.getPageSize())
+                .where(photo.extension.ne("HEIC")).orderBy(photo.takeTime.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize())
                 .fetch();
         return new PageImpl<>(photos, pageable, 1000);
     }

@@ -8,12 +8,11 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ElCard: typeof import('element-plus/es')['ElCard']
-    ElCol: typeof import('element-plus/es')['ElCol']
     ElImage: typeof import('element-plus/es')['ElImage']
-    ElRow: typeof import('element-plus/es')['ElRow']
+    ElTimeline: typeof import('element-plus/es')['ElTimeline']
+    ElTimelineItem: typeof import('element-plus/es')['ElTimelineItem']
     GalleryWall: typeof import('./src/components/GalleryWall.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
-    Photo: typeof import('./src/components/Photo.vue')['default']
     PhotoItem: typeof import('./src/components/PhotoItem.vue')['default']
   }
 }
