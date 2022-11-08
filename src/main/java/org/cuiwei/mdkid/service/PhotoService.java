@@ -44,14 +44,20 @@ public class PhotoService {
 
 
     public List<Photo> listAll() {
-        return photoRepository.findAll();
+        QPhoto photo = QPhoto.photo;
+        List<Photo> photos = queryFactory.selectFrom(photo)
+                .where(photo.extension.ne("HEIC")
+                        .and(photo.takeTime.isNotNull()))
+                .orderBy(photo.takeTime.desc())
+                .fetch();
+        return photos;
     }
 
     public Page<Photo> list() {
         QPhoto photo = QPhoto.photo;
         Pageable pageable = PageRequest.of(1, 50);
         List<Photo> photos = queryFactory.selectFrom(photo)
-                .where(photo.extension.ne("HEIC")).orderBy(photo.takeTime.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize())
+                .where(photo.extension.ne("HEIC").and(photo.takeTime.isNotNull())).orderBy(photo.takeTime.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize())
                 .fetch();
         return new PageImpl<>(photos, pageable, 1000);
     }
@@ -97,13 +103,17 @@ public class PhotoService {
             FileUtil.mkdir(thumbnailPath);
         }
         File photo = getOriginal(fid);
-        File destFile = new File(StrFormatter.format("{}{}{}.jpg", thumbnailPath, File.separator, fid));
-        if (!FileUtil.exist(destFile)) {
-            log.info("scale {} -> {}", photo.getPath(), destFile.getPath());
-            ImageUtil.scale(
-                    photo,
-                    FileUtil.getOutputStream(destFile));
+        if (FileUtil.exist(photo)) {
+            File destFile = new File(StrFormatter.format("{}{}{}.jpg", thumbnailPath, File.separator, fid));
+            if (!FileUtil.exist(destFile)) {
+                log.info("scale {} -> {}", photo.getPath(), destFile.getPath());
+                ImageUtil.scale(
+                        photo,
+                        FileUtil.getOutputStream(destFile));
+            }
+            return destFile;
+        } else {
+            return null;
         }
-        return destFile;
     }
 }
