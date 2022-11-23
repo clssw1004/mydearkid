@@ -55,7 +55,7 @@ public class ImageUtil {
     }
 
     public static boolean isSupportImg(String file) {
-        return Constant.SUPPORT_EXTENSIONS.stream().anyMatch(ext -> Constant.ALL_TYPE_EXTENSION.endsWith(ext) || FileUtil.extName(file).toUpperCase().endsWith(ext));
+        return Constant.SUPPORT_EXTENSIONS.stream().anyMatch(ext -> Constant.ALL_TYPE_EXTENSION.equals(ext) || FileUtil.extName(file).toUpperCase().endsWith(ext));
     }
 
     public static boolean isSupportImg(File file) {
