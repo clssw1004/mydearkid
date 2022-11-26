@@ -9,3 +9,9 @@ export interface Photo {
     path: string;
     takeTime: string;
 }
+
+export interface PhotoGroup
+{
+    date:string;
+    photos: Photo[];
+}

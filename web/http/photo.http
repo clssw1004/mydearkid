@@ -1,3 +1,8 @@
 @gateway=http://127.0.0.1:17777/api
 ###
 GET {{gateway}}/photo/
+
+###
+GET {{gateway}}/photo/groupWith?g=yyyy-MM
+Content-Type: application/x-www-form-urlencoded
+

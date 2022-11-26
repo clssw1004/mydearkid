@@ -11,8 +11,7 @@ export interface Page<T> {
     size: number;
 }
 
+
 export interface PageRequest {
-    page: number;
-    pagesize: number;
-    condition?: any;
+    g:string
 }

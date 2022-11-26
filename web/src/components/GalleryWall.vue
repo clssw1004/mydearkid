@@ -1,20 +1,20 @@
 <script  lang="ts">
 import { defineComponent } from 'vue'
-import { Photo } from "../types/Photo"
-import { getPage } from "../services/photo";
+import { Photo, PhotoGroup } from "../types/Photo"
+import { getPhotoPage } from "../services/photo";
 import PhotoItem from './PhotoItem.vue'
 export default defineComponent({
     data() {
-        const list: Photo[] = [];
+        const list: PhotoGroup[] = [];
         return {
             list,
             reverse: false
         };
     },
     async mounted() {
-        const page = await getPage({ page: 1, pagesize: 20 });
-        if (page.size > 0) {
-            this.list = page.content;
+        const page = await getPhotoPage({ g: "yyyy-MM" });
+        if (page.length > 0) {
+            this.list = page;
         }
     },
     components: { PhotoItem }
@@ -22,18 +22,14 @@ export default defineComponent({
 
 </script>
 <template>
-    <!-- <div class="gallery-box"> -->
     <el-timeline :reverse="reverse">
-        <el-timeline-item v-for="photo of list" :key="photo.uid" :timestamp="photo.takeTime">
-            <PhotoItem :photo="photo" />
+        <el-timeline-item v-for="{ date, photos } in list" :key="date" :timestamp="date" :hide-timestamp="true">
+            <h2>{{ date }}</h2>
+            <PhotoItem v-for="photo of photos" :photo="photo" />
         </el-timeline-item>
     </el-timeline>
-    <!-- </div> -->
 </template>
 
 <style scoped>
-.gallery-box {
-    width: 100%;
-    float: left;
-}
+
 </style>

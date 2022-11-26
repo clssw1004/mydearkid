@@ -6,21 +6,21 @@ defineProps<{ photo: Photo }>()
 </script>
 
 <template>
-    <el-card class="img-item" :body-style="{ padding: '0px' }">
-        <el-image :src="`http://127.0.0.1:17777/api/photo//thumbnail/${photo.fid}`" fit="fill" />
-        <div v-if="photo.takeTime">{{photo.takeTime}}</div>
-    </el-card>
+    <div class="img-box" :body-style="{ padding: '0px' }">
+        <el-image class="image-item" :src="`http://127.0.0.1:17777/api/photo/thumbnail/${photo.fid}`" fit="fill" />
+        <!-- <div v-if="photo.takeTime">{{photo.takeTime}}</div> -->
+    </div>
 </template>
 
 <style scoped>
-.gallery-box {
-    float: left;
-}
-
-.img-item {
-    width: 200px;
-    height: 200px;
+.img-box {
     display: inline-block;
     margin: 0 5px;
+    background: transparent;
+    border: 0;
+}
+
+.image-item {
+
 }
 </style>
