@@ -27,7 +27,7 @@ public class RefreshPhotos {
     @Autowired
     PhotoService photoService;
 
-    @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0 0 * * * ?")
     public void refresh() {
         File dir = new File(photoPath);
         if (!dir.exists() || !dir.isDirectory()) {

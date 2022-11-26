@@ -4,10 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.cuiwei.mdkid.core.Response;
 import org.cuiwei.mdkid.service.PhotoService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -28,6 +25,12 @@ public class PhotoController {
     public Response list() {
         return Response.builder().code(0).message("ok").data(photoService.list()).build();
     }
+
+    @GetMapping("/groupWith")
+    public Response groupWith(@RequestParam("groupWith") String groupWith) {
+        return Response.builder().code(0).message("ok").data(photoService.listAllGroupBy(groupWith)).build();
+    }
+
 
     @GetMapping("/origin/{fid}")
     public void originPhoto(@PathVariable("fid") String fid, HttpServletResponse response) throws IOException {

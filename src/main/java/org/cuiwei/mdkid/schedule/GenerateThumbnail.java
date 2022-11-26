@@ -19,7 +19,7 @@ public class GenerateThumbnail {
     @Resource
     PhotoService photoService;
 
-    @Scheduled(cron = "0 0/30 * * * ?")
+    @Scheduled(cron = "0 0 * * * ?")
     public void generateThumbnail() throws IOException {
         List<Photo> photos = photoService.listAll();
         if (CollectionUtil.isEmpty(photos)) {

@@ -21,7 +21,7 @@ public class Constant {
         GAODE_APPID = FileUtil.readUtf8String(gaodekey);
     }
 
-    @Value("${config.EXTENSIONS:*}")
+    @Value("${config.extensions:*}")
     public void setSupportExtensions(String extensions) {
         SUPPORT_EXTENSIONS = Arrays.stream(extensions.split(",")).map(ext -> ext.toUpperCase()).toList();
     }

@@ -1,8 +1,11 @@
 package org.cuiwei.mdkid.service;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.text.StrFormatter;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -26,8 +29,8 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -42,12 +45,35 @@ public class PhotoService {
     @Resource
     PhotoRepository photoRepository;
 
-
-    public List<Photo> listAll() {
+    public Map<String, List<Photo>> listAllGroupBy(String groupBy) {
+        final String format = StrUtil.isBlank(groupBy) ? "yyyy-mm" : groupBy;
         QPhoto photo = QPhoto.photo;
         List<Photo> photos = queryFactory.selectFrom(photo)
                 .where(photo.extension.ne("HEIC")
                         .and(photo.takeTime.isNotNull()))
+                .orderBy(photo.takeTime.desc())
+                .fetch();
+        Map<String, List<Photo>> groupPhotos = new LinkedHashMap<>();
+        if (CollUtil.isNotEmpty(photos)) {
+            photos.forEach(p -> {
+                String dt;
+                if (p.getTakeTime() != null) {
+                    dt = p.getTakeTime().format(DateTimeFormatter.ofPattern(format));
+                } else {
+                    dt = "#";
+                }
+                if (!groupPhotos.containsKey(dt)) {
+                    groupPhotos.put(dt, new ArrayList<>());
+                }
+                groupPhotos.get(dt).add(p);
+            });
+        }
+        return groupPhotos;
+    }
+
+    public List<Photo> listAll() {
+        QPhoto photo = QPhoto.photo;
+        List<Photo> photos = queryFactory.selectFrom(photo)
                 .orderBy(photo.takeTime.desc())
                 .fetch();
         return photos;
@@ -83,7 +109,7 @@ public class PhotoService {
         photo.setFileSha256(DigestUtil.sha256Hex(img));
         photo.setExtension(FileUtil.extName(img));
         Metadata metadata = ImageMetadataReader.readMetadata(img);
-        photo.setAddress(ExifUtil.getAddress(metadata));
+//        photo.setAddress(ExifUtil.getAddress(metadata));
         photo.setTakeTime(ExifUtil.getTakeTime(metadata));
         photoRepository.save(photo);
         return photo.getUid();
