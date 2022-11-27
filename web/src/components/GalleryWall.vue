@@ -1,15 +1,16 @@
 <template>
-
-    <h1>这个是标题</h1>
-    <div>
-        <template v-for="year in years">
-            <el-button @click="() => {
-                getPhotos(year.year)
-            }" class="tag-year">{{ year.year }}</el-button>
+    <div class="gallery-title">
+        <h1>这个是标题</h1>
+    </div>
+    <div class="gallery-time">
+        <template v-for="item in years">
+            <el-button :type="selectYear == item.year ? 'primary' : undefined" @click="() => {
+                getPhotos(item.year)
+            }" class="tag-year">{{ item.year }}&nbsp;({{ item.count }})</el-button>
         </template>
     </div>
 
-    <div>
+    <div class="gallery-scale">
         <el-radio-group v-model="scale" size="mini">
             <el-radio-button label="minimum">最小</el-radio-button>
             <el-radio-button label="mini">小</el-radio-button>
@@ -29,7 +30,7 @@
 
 <script  lang="ts">
 import { defineComponent } from 'vue'
-import { Photo, PhotoGroup, PhotoYearDistribute } from "../types/Photo"
+import { PhotoGroup, PhotoYearDistribute } from "../types/Photo"
 import { getPhotoPage, getYears } from "../services/photo";
 import PhotoItem from './PhotoItem.vue'
 import { ElRadioGroup, ElRadioButton, ElTimeline, ElTimelineItem } from 'element-plus';
@@ -53,6 +54,7 @@ export default defineComponent({
     },
     methods: {
         async getPhotos(y: string) {
+            this.selectYear = y;
             const photos = await getPhotoPage({ g: "yyyy-MM", y });
             console.log(y)
             if (photos.length > 0) {
@@ -75,5 +77,17 @@ export default defineComponent({
 <style scoped>
 .tag-year {
     margin: 10px;
+}
+
+.gallery-title {
+    text-align: center;
+}
+
+.gallery-time {
+    text-align: center;
+}
+
+.gallery-scale {
+    text-align: right;
 }
 </style>

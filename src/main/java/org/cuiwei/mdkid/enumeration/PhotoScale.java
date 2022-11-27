@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 public enum PhotoScale {
-    MINIMUM("minimum", 50f),
-    MINI("mini", 150f),
-    MEDIUM("medium", 250f),
+    MINIMUM("minimum", 100f),
+    MINI("mini", 2000f),
+    MEDIUM("medium", 300f),
     LARGE("large", 400f),
     LARGEST("largest", 500f);
     @Getter

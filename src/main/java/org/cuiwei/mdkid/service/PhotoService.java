@@ -1,7 +1,6 @@
 package org.cuiwei.mdkid.service;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.text.StrFormatter;
 import cn.hutool.core.util.IdUtil;
@@ -62,7 +61,7 @@ public class PhotoService {
         }
         List<Photo> photos = queryFactory.selectFrom(photo)
                 .where(where)
-                .limit(200).offset(1)
+                .limit(1000).offset(0)
                 .orderBy(photo.takeTime.desc())
                 .fetch();
         Map<String, List<Photo>> groupPhotos = new LinkedHashMap<>();
