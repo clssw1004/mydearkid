@@ -12,6 +12,8 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.cuiwei.mdkid.dto.PhotoGroup;
+import org.cuiwei.mdkid.enumeration.PhotoScale;
 import org.cuiwei.mdkid.model.Photo;
 import org.cuiwei.mdkid.model.QPhoto;
 import org.cuiwei.mdkid.repository.PhotoRepository;
@@ -45,12 +47,13 @@ public class PhotoService {
     @Resource
     PhotoRepository photoRepository;
 
-    public Map<String, List<Photo>> listAllGroupBy(String groupBy) {
+    public List<PhotoGroup> listAllGroupBy(String groupBy) {
         final String format = StrUtil.isBlank(groupBy) ? "yyyy-mm" : groupBy;
         QPhoto photo = QPhoto.photo;
         List<Photo> photos = queryFactory.selectFrom(photo)
                 .where(photo.extension.ne("HEIC")
                         .and(photo.takeTime.isNotNull()))
+                .limit(200).offset(1)
                 .orderBy(photo.takeTime.desc())
                 .fetch();
         Map<String, List<Photo>> groupPhotos = new LinkedHashMap<>();
@@ -68,7 +71,7 @@ public class PhotoService {
                 groupPhotos.get(dt).add(p);
             });
         }
-        return groupPhotos;
+        return groupPhotos.entrySet().stream().map(e -> new PhotoGroup(e.getKey(), e.getValue())).toList();
     }
 
     public List<Photo> listAll() {
@@ -124,17 +127,18 @@ public class PhotoService {
         throw new RuntimeException("文件不存在");
     }
 
-    public File getThumbnail(String fid) throws IOException {
+    public File getThumbnail(String fid, PhotoScale scale) throws IOException {
         if (!FileUtil.exist(thumbnailPath)) {
             FileUtil.mkdir(thumbnailPath);
         }
         File photo = getOriginal(fid);
         if (FileUtil.exist(photo)) {
-            File destFile = new File(StrFormatter.format("{}{}{}.jpg", thumbnailPath, File.separator, fid));
+            File destFile = new File(StrFormatter.format("{}{}{}{}{}.jpg", thumbnailPath, File.separator, scale.getScale(), File.separator, fid));
             if (!FileUtil.exist(destFile)) {
                 log.info("scale {} -> {}", photo.getPath(), destFile.getPath());
                 ImageUtil.scale(
                         photo,
+                        scale.getPx(),
                         FileUtil.getOutputStream(destFile));
             }
             return destFile;

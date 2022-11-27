@@ -39,6 +39,9 @@ public class RefreshPhotos {
             photoMap = photos.stream().collect(Collectors.toMap(Photo::getFileSha256, p -> p));
         }
         String[] children = dir.list();
+        if (children == null) {
+            return;
+        }
         for (String f : children) {
             try {
                 if (!ImageUtil.isSupportImg(f)) {

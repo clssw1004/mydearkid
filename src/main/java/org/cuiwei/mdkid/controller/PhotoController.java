@@ -3,6 +3,7 @@ package org.cuiwei.mdkid.controller;
 import cn.hutool.core.io.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.cuiwei.mdkid.core.Response;
+import org.cuiwei.mdkid.enumeration.PhotoScale;
 import org.cuiwei.mdkid.service.PhotoService;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class PhotoController {
     }
 
     @GetMapping("/groupWith")
-    public Response groupWith(@RequestParam("groupWith") String groupWith) {
+    public Response groupWith(@RequestParam("g") String groupWith) {
         return Response.builder().code(0).message("ok").data(photoService.listAllGroupBy(groupWith)).build();
     }
 
@@ -39,17 +40,10 @@ public class PhotoController {
         FileUtil.writeToStream(file, os);
     }
 
-    @GetMapping("/thumbnail/{fid}")
-    public void previewPhoto(@PathVariable("fid") String fid, HttpServletResponse response) throws IOException {
-        File file = photoService.getThumbnail(fid);
+    @GetMapping("/{scale}/{fid}")
+    public void previewPhoto(@PathVariable("fid") String fid, @PathVariable("scale") PhotoScale scale, HttpServletResponse response) throws IOException {
+        File file = photoService.getThumbnail(fid, scale);
         if (file.exists()) {
-//            float quality = 100000f / file.length();
-//            log.info("{},{}", file.length(), quality);
-//        BufferedImage image = ImageIO.read(file);
-//        ImageIO.write(image, "webp", response.getOutputStream());
-//            ImageUtil.toWebp(file, response.getOutputStream(), WebPWriteParam.LOSSY_COMPRESSION, quality);
-//            ImgUtil.scale(new FileInputStream(file), response.getOutputStream(), quality);
-//            ImageUtil.scale(file, response.getOutputStream());
             FileUtil.writeToStream(file, response.getOutputStream());
         }
     }

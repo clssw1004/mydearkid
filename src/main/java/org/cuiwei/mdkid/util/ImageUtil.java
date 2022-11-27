@@ -41,15 +41,15 @@ public class ImageUtil {
         writer.write(null, new IIOImage(image, null, null), writeParam);
     }
 
-    public static void scale(File file, OutputStream os) throws IOException {
+    public static void scale(File file,float size, OutputStream os) throws IOException {
         BufferedImage image = ImageIO.read(file);
         int width = image.getWidth();
         int height = image.getHeight();
         float scale = 1f;
         if (width > height) {
-            scale = 200f / width;
+            scale = size / width;
         } else {
-            scale = 200f / height;
+            scale = size / height;
         }
         ImgUtil.scale(new FileInputStream(file), os, scale);
     }
