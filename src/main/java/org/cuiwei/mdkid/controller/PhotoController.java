@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/photo")
@@ -28,8 +29,16 @@ public class PhotoController {
     }
 
     @GetMapping("/groupWith")
-    public Response groupWith(@RequestParam("g") String groupWith) {
-        return Response.builder().code(0).message("ok").data(photoService.listAllGroupBy(groupWith)).build();
+    public Response groupWith(@RequestParam("g") String groupWith, @RequestParam(value = "y", required = false) Integer year) {
+        if (year == null) {
+            year = LocalDateTime.now().getYear();
+        }
+        return Response.builder().code(0).message("ok").data(photoService.listAllGroupBy(groupWith, year)).build();
+    }
+
+    @GetMapping("/years")
+    public Response getYears() {
+        return Response.builder().code(0).message("ok").data(photoService.getYears()).build();
     }
 
 

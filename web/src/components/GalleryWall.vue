@@ -1,7 +1,7 @@
 <script  lang="ts">
 import { defineComponent } from 'vue'
 import { Photo, PhotoGroup } from "../types/Photo"
-import { getPhotoPage } from "../services/photo";
+import { getPhotoPage, getYears } from "../services/photo";
 import PhotoItem from './PhotoItem.vue'
 export default defineComponent({
     data() {
@@ -13,10 +13,19 @@ export default defineComponent({
         };
     },
     async mounted() {
-        const page = await getPhotoPage({ g: "yyyy-MM" });
-        if (page.length > 0) {
-            this.list = page;
+        await this.loadYears();
+    },
+    methods: {
+        async getPhotos() {
+            const page = await getPhotoPage({ g: "yyyy-MM" });
+            if (page.length > 0) {
+                this.list = page;
+            }
+        },
+        async loadYears() {
+            const years = await getYears();
         }
+
     },
     components: { PhotoItem }
 })

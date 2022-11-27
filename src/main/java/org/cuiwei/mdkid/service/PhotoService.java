@@ -10,9 +10,11 @@ import cn.hutool.crypto.digest.DigestUtil;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.cuiwei.mdkid.dto.PhotoGroup;
+import org.cuiwei.mdkid.dto.PhotoYearDistribute;
 import org.cuiwei.mdkid.enumeration.PhotoScale;
 import org.cuiwei.mdkid.model.Photo;
 import org.cuiwei.mdkid.model.QPhoto;
@@ -47,12 +49,11 @@ public class PhotoService {
     @Resource
     PhotoRepository photoRepository;
 
-    public List<PhotoGroup> listAllGroupBy(String groupBy) {
+    public List<PhotoGroup> listAllGroupBy(String groupBy, Integer year) {
         final String format = StrUtil.isBlank(groupBy) ? "yyyy-mm" : groupBy;
         QPhoto photo = QPhoto.photo;
         List<Photo> photos = queryFactory.selectFrom(photo)
-                .where(photo.extension.ne("HEIC")
-                        .and(photo.takeTime.isNotNull()))
+                .where(photo.takeTime.isNotNull().and(photo.takeTime.year().eq(year)))
                 .limit(200).offset(1)
                 .orderBy(photo.takeTime.desc())
                 .fetch();
@@ -72,6 +73,24 @@ public class PhotoService {
             });
         }
         return groupPhotos.entrySet().stream().map(e -> new PhotoGroup(e.getKey(), e.getValue())).toList();
+    }
+
+    public List<PhotoYearDistribute> getYears() {
+        QPhoto photo = QPhoto.photo;
+        List<Tuple> years = queryFactory.select(photo.takeTime.year(), photo.count()).from(photo).orderBy(photo.takeTime.year().asc()).groupBy(photo.takeTime.year()).fetch();
+        List<PhotoYearDistribute> result = new ArrayList<>();
+        if (years.size() > 0) {
+            for (Tuple tuple : years) {
+                Integer year = tuple.get(0, Integer.class);
+                Long count = tuple.get(1, Long.class);
+                if (year == null) {
+                    result.add(new PhotoYearDistribute("#", count));
+                } else {
+                    result.add(new PhotoYearDistribute(year.toString(), count));
+                }
+            }
+        }
+        return result;
     }
 
     public List<Photo> listAll() {
