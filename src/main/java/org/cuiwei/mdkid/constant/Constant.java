@@ -23,7 +23,7 @@ public class Constant {
 
     @Value("${config.extensions:*}")
     public void setSupportExtensions(String extensions) {
-        SUPPORT_EXTENSIONS = Arrays.stream(extensions.split(",")).map(ext -> ext.toUpperCase()).toList();
+        SUPPORT_EXTENSIONS = Arrays.stream(extensions.split(",")).map(String::toUpperCase).toList();
     }
 
 

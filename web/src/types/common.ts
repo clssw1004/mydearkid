@@ -13,5 +13,6 @@ export interface Page<T> {
 
 
 export interface PageRequest {
-    g:string
+    g: string
+    y: string
 }

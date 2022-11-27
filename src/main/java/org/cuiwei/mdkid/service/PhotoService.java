@@ -11,9 +11,11 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.cuiwei.mdkid.dto.PhotoGroup;
+import org.cuiwei.mdkid.dto.PhotoRequest;
 import org.cuiwei.mdkid.dto.PhotoYearDistribute;
 import org.cuiwei.mdkid.enumeration.PhotoScale;
 import org.cuiwei.mdkid.model.Photo;
@@ -49,11 +51,17 @@ public class PhotoService {
     @Resource
     PhotoRepository photoRepository;
 
-    public List<PhotoGroup> listAllGroupBy(String groupBy, Integer year) {
-        final String format = StrUtil.isBlank(groupBy) ? "yyyy-mm" : groupBy;
+    public List<PhotoGroup> listAllGroupBy(PhotoRequest request) {
+        final String format = StrUtil.isBlank(request.getG()) ? "yyyy-mm" : request.getG();
         QPhoto photo = QPhoto.photo;
+        BooleanExpression where;
+        if ("#".equals(request.getY())) {
+            where = photo.takeTime.isNull();
+        } else {
+            where = photo.takeTime.isNotNull().and(photo.takeTime.year().eq(Integer.parseInt(request.getY())));
+        }
         List<Photo> photos = queryFactory.selectFrom(photo)
-                .where(photo.takeTime.isNotNull().and(photo.takeTime.year().eq(year)))
+                .where(where)
                 .limit(200).offset(1)
                 .orderBy(photo.takeTime.desc())
                 .fetch();

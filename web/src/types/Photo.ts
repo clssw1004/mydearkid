@@ -10,8 +10,12 @@ export interface Photo {
     takeTime: string;
 }
 
-export interface PhotoGroup
-{
-    date:string;
+export interface PhotoGroup {
+    date: string;
     photos: Photo[];
+}
+
+export interface PhotoYearDistribute {
+    year: string;
+    count: number;
 }

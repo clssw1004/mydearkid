@@ -3,6 +3,7 @@ package org.cuiwei.mdkid.controller;
 import cn.hutool.core.io.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.cuiwei.mdkid.core.Response;
+import org.cuiwei.mdkid.dto.PhotoRequest;
 import org.cuiwei.mdkid.enumeration.PhotoScale;
 import org.cuiwei.mdkid.service.PhotoService;
 import org.springframework.web.bind.annotation.*;
@@ -28,12 +29,12 @@ public class PhotoController {
         return Response.builder().code(0).message("ok").data(photoService.list()).build();
     }
 
-    @GetMapping("/groupWith")
-    public Response groupWith(@RequestParam("g") String groupWith, @RequestParam(value = "y", required = false) Integer year) {
-        if (year == null) {
-            year = LocalDateTime.now().getYear();
+    @PostMapping("/groupWith")
+    public Response groupWith(@RequestBody PhotoRequest request) {
+        if (request.getY() == null) {
+            request.setY(LocalDateTime.now().getYear() + "");
         }
-        return Response.builder().code(0).message("ok").data(photoService.listAllGroupBy(groupWith, year)).build();
+        return Response.builder().code(0).message("ok").data(photoService.listAllGroupBy(request)).build();
     }
 
     @GetMapping("/years")

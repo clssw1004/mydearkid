@@ -17,4 +17,4 @@ config:
     photo: ${PHOTO_PATH:D:/cuiwei/Images}
     thumbnail: ${THUMBNAIL_PATH:D:/cache/thumbnail}
     gaodekey: ${GAODE_KEY:D:/wspec/mydearkid/gaodekey}
-  extensions: ${EXTENSIONS:jpeg,png,bmp,jpg
+  extensions: ${EXTENSIONS:jpeg,png,bmp,jpg}
