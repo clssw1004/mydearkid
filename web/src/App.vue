@@ -1,10 +1,10 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import GalleryWall from './components/GalleryWall.vue'
 </script>
 
 <template>
-  <GalleryWall />
+  <div>
+    <router-link to="/gallery">照片墙</router-link>
+  </div>
+  <router-view></router-view>
 </template>
 

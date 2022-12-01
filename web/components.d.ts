@@ -19,5 +19,7 @@ declare module '@vue/runtime-core' {
     GalleryWall: typeof import('./src/components/GalleryWall.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     PhotoItem: typeof import('./src/components/PhotoItem.vue')['default']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
   }
 }
