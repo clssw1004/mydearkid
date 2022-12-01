@@ -1,5 +1,6 @@
-import { createRouter, createWebHashHistory } from "vue-router";
-import GalleryWall from "../components/GalleryWall.vue";
+import { createRouter, createWebHistory } from "vue-router";
+
+const GalleryWall = () => import('../components/GalleryWall.vue')
 
 const routes = [
     { path: '/gallery', component: GalleryWall, name: "gallery", default: true },
@@ -7,7 +8,7 @@ const routes = [
 
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes,
 })
 
